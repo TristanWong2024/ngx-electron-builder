@@ -12,6 +12,7 @@
     "noUnusedParameters": false,
     "noUnusedLocals": false,
     "rootDir": "./src",
+    "outDir": "./dist",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "inlineSourceMap": true,
@@ -29,7 +30,7 @@
     "types": [
       "node",
       "webpack"
-    ],
+    ]
   },
   "exclude": [
     "dist",

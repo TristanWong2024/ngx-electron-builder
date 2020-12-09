@@ -1,14 +1,19 @@
 {
   "builders": {
     "build": {
-      "implementation": "./src/build",
-      "schema": "./src/build/schema.json",
+      "implementation": "./dist/build",
+      "schema": "./dist/build/schema.json",
       "description": "Electron Builder"
     },
     "dev-server": {
-      "implementation": "./src/dev-server",
-      "schema": "./src/dev-server/schema.json",
+      "implementation": "./dist/dev-server",
+      "schema": "./dist/dev-server/schema.json",
       "description": "Electron Builder using dev-server"
+    },
+    "pack": {
+      "implementation": "./dist/pack",
+      "schema": "./dist/pack/schema.json",
+      "description": "Electron pack use electron-builder"
     }
   }
 }

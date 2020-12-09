@@ -3,44 +3,71 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "demo-builder": {
+    "miup-downloader": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "inlineTemplate": true,
+          "inlineStyle": true,
+          "style": "scss",
+          "skipTests": true
+        },
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        },
+        "@schematics/angular:interceptor": {
+          "skipTests": true
+        },
+        "@schematics/angular:module": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        },
+        "@schematics/angular:application": {
+          "strict": true
         }
       },
       "root": "",
-      "sourceRoot": "src",
+      "sourceRoot": "src/render",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "./projects/electron-builder:build",
           "options": {
-            "mainProcess": "src/main/index.ts",
-            "mainProcessOutputName": "index.js",
-            "mainProcessTsConfig": "tsconfig.main.json",
-            "outputPath": "dist/demo-builder",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
+            "outputPath": "dist/miup-downloader",
+            "index": "src/render/index.html",
+            "main": "src/render/main.ts",
+            "polyfills": "src/render/polyfills.ts",
+            "tsConfig": "tsconfig.render.json",
             "aot": true,
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "src/render/favicon.ico",
+              "src/render/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/render/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "mainProcess": "src/main/index.ts",
+            "mainProcessOutputName": "index.js",
+            "mainProcessTsConfig": "tsconfig.main.json"
           },
           "configurations": {
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "src/render/environments/environment.ts",
+                  "with": "src/render/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -53,13 +80,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
                 }
               ]
             }
@@ -68,16 +95,22 @@
         "serve": {
           "builder": "./projects/electron-builder:dev-server",
           "options": {
-            "browserTarget": "demo-builder:build"
+            "browserTarget": "miup-downloader:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "demo-builder:build:production"
+              "browserTarget": "miup-downloader:build:production"
             }
+          }
+        },
+        "pack": {
+          "builder": "./projects/electron-builder:pack",
+          "options": {
+            "browserTarget": "miup-downloader:build"
           }
         }
       }
     }
   },
-  "defaultProject": "demo-builder"
+  "defaultProject": "miup-downloader"
 }

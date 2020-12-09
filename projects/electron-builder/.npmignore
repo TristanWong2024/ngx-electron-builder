@@ -1,1 +1,4 @@
 ./tsconfig.json
+src
+.vscode
+.idea
