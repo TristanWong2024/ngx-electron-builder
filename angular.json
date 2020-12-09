@@ -60,7 +60,8 @@
             "scripts": [],
             "mainProcess": "src/main/index.ts",
             "mainProcessOutputName": "index.js",
-            "mainProcessTsConfig": "tsconfig.main.json"
+            "mainProcessTsConfig": "tsconfig.main.json",
+            "electronBuildConfig": "electron-builder.js"
           },
           "configurations": {
             "production": {
@@ -102,15 +103,12 @@
               "browserTarget": "miup-downloader:build:production"
             }
           }
-        },
-        "pack": {
-          "builder": "./projects/electron-builder:pack",
-          "options": {
-            "browserTarget": "miup-downloader:build"
-          }
         }
       }
     }
   },
-  "defaultProject": "miup-downloader"
+  "defaultProject": "miup-downloader",
+  "cli": {
+    "analytics": false
+  }
 }

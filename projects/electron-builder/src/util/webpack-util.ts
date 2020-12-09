@@ -2,10 +2,10 @@ import * as path from 'path';
 import * as webpack from 'webpack';
 import * as nodeExternals from 'webpack-node-externals';
 import {BuilderContext} from '@angular-devkit/architect';
-import {DevElectronServerBuilderOptions} from '../build/schema';
+import {ElectronBuildConfig} from '../build/schema';
 
 export class WebpackUtil {
-    static buildMainProcessWebpack(context: BuilderContext, defaultConfig: DevElectronServerBuilderOptions): webpack.Configuration {
+    static buildMainProcessWebpack(context: BuilderContext, defaultConfig: ElectronBuildConfig): webpack.Configuration {
         const nodeExternal = nodeExternals();
         const config: webpack.Configuration = {
             resolve: {

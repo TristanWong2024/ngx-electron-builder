@@ -5,13 +5,13 @@ import {Observable, of} from 'rxjs';
 import {flatMap} from 'rxjs/internal/operators';
 import {WebpackUtil} from '../util/webpack-util';
 import * as webpack from 'webpack';
-import {DevElectronServerBuilderOptions} from '../build/schema';
-import {DevServerBuilderOptions} from '@angular-devkit/build-angular/src/dev-server';
+import {ElectronBuildConfig} from '../build/schema';
 import {BuildUtil} from '../util/build-util';
 import * as path from 'path';
 import {ChildProcess} from 'child_process';
+import {ElectronServeOptions} from './schema';
 
-export function buildElectronDevServer(options: DevServerBuilderOptions, context: BuilderContext): Observable<BuilderOutput> {
+export function buildElectronDevServer(options: ElectronServeOptions, context: BuilderContext): Observable<BuilderOutput> {
     let mainProcessWatch = false;
     let mainProcess: ChildProcess;
     context.logger.debug('start build renderer process');
@@ -29,7 +29,7 @@ export function buildElectronDevServer(options: DevServerBuilderOptions, context
             const browserTarget = targetFromTargetString(options.browserTarget);
             context.logger.info(`start build main process`);
             context.getTargetOptions(browserTarget).then((buildBrowserOptions) => {
-                const webBuildConfig = buildBrowserOptions as unknown as DevElectronServerBuilderOptions;
+                const webBuildConfig = buildBrowserOptions as unknown as ElectronBuildConfig;
                 const config: any = WebpackUtil.buildMainProcessWebpack(context, webBuildConfig);
                 webpack(config).watch({}, (e, status) => {
                     if (e || status.hasErrors()) {

@@ -18,6 +18,10 @@
       "description": "The full path for the main entry point to the app, relative to the current workspace.",
       "$valueDescription": "fileName"
     },
+    "electronBuildConfig": {
+      "type": "string",
+      "description": "electron build config file path ,default `electron-build.js`"
+    },
     "assets": {
       "type": "array",
       "description": "List of static application assets.",
