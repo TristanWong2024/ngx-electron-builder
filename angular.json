@@ -44,7 +44,7 @@
         "build": {
           "builder": "./projects/electron-builder:build",
           "options": {
-            "outputPath": "dist/miup-downloader",
+            "outputPath": "dist/ngx-electron-builder",
             "index": "src/render/index.html",
             "main": "src/render/main.ts",
             "polyfills": "src/render/polyfills.ts",
@@ -61,7 +61,8 @@
             "mainProcess": "src/main/index.ts",
             "mainProcessOutputName": "index.js",
             "mainProcessTsConfig": "tsconfig.main.json",
-            "electronBuildConfig": "electron-builder.js"
+            "electronBuildConfig": "electron-builder.js",
+            "skipDependencies": []
           },
           "configurations": {
             "production": {

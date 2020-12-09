@@ -4,6 +4,7 @@ import * as nodeExternals from 'webpack-node-externals';
 import {BuilderContext} from '@angular-devkit/architect';
 import {ElectronBuildConfig} from '../build/schema';
 
+
 export class WebpackUtil {
     static buildMainProcessWebpack(context: BuilderContext, defaultConfig: ElectronBuildConfig): webpack.Configuration {
         const nodeExternal = nodeExternals();
@@ -22,16 +23,6 @@ export class WebpackUtil {
             },
             target: 'node',
             externals: [nodeExternal],
-            node: {
-                console: false,
-                global: false,
-                process: false,
-                Buffer: false,
-                __filename: false,
-                __dirname: false,
-                setImmediate: false,
-                path: false
-            },
             module: {
                 rules: [
                     {
@@ -53,5 +44,45 @@ export class WebpackUtil {
             ],
         };
         return config;
+    }
+
+
+    static registerProtocol(scheme: string): string {
+        return `require('electron').app.on('browser-window-created', function () {
+    if (this.___schemaRegister) {
+        return
+    }
+    require('electron').protocol.registerBufferProtocol('${scheme}', (request, respond) => {
+            const {URL} = require('url')
+            const path = require('path')
+            const {readFile} = require('fs')
+            let pathName = new URL(request.url).pathname
+            pathName = decodeURI(pathName) // Needed in case URL contains spaces
+            readFile(path.join(__dirname, pathName), (error, data) => {
+                if (error) {
+                    respond({mimeType: 'text/html', data: Buffer.from('<h5>500</h5>')})
+                    return
+                }
+                const extension = path.extname(pathName).toLowerCase()
+                let mimeType = ''
+                if (extension === '.js') {
+                    mimeType = 'text/javascript'
+                } else if (extension === '.html') {
+                    mimeType = 'text/html'
+                } else if (extension === '.css') {
+                    mimeType = 'text/css'
+                } else if (extension === '.svg' || extension === '.svgz') {
+                    mimeType = 'image/svg+xml'
+                } else if (extension === '.json') {
+                    mimeType = 'application/json'
+                } else if (extension === ".wasm") {
+                    mimeType = "application/wasm";
+                }
+                respond({mimeType, data})
+            })
+        }
+    )
+    this.___schemaRegister = true
+})`;
     }
 }

@@ -24,12 +24,17 @@
     "electron": "latest"
   },
   "dependencies": {
+    "fs-extra": "^9.0.1",
+    "lodash": "^4.17.20",
+    "lodash.merge": "^4.6.2",
     "tree-kill": "^1.2.2",
     "ts-loader": "^8.0.11",
     "webpack-node-externals": "^2.5.2"
   },
   "devDependencies": {
     "@types/clean-webpack-plugin": "^0.1.3",
+    "@types/fs-extra": "^9.0.4",
+    "@types/lodash.merge": "^4.6.6",
     "@types/node": "latest",
     "@types/webpack": "latest",
     "@types/webpack-dev-server": "latest",

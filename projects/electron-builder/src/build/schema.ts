@@ -5,6 +5,8 @@ interface ElectronMainBuildConfig {
     mainProcessOutputName: string;
     mainProcessTsConfig: string;
     electronBuildConfig: string;
+    skipDependencies: Array<string>,
+    renderProtocol: string
 }
 
 export type ElectronBuildConfig = BrowserBuilderSchema & ElectronMainBuildConfig;
