@@ -21,7 +21,7 @@ export class WebpackUtil {
                 publicPath: path.join(context.workspaceRoot, defaultConfig.outputPath),
                 libraryTarget: 'commonjs',
             },
-            target: 'node',
+            target: 'electron-main',
             externals: [nodeExternal],
             module: {
                 rules: [
@@ -45,8 +45,6 @@ export class WebpackUtil {
         };
         return config;
     }
-
-
     static registerProtocol(scheme: string): string {
         return `require('electron').app.on('browser-window-created', function () {
     if (this.___schemaRegister) {

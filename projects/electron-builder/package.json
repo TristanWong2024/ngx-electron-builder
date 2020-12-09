@@ -1,6 +1,6 @@
 {
   "name": "@miup/ngx-electron-builder",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Electron Builder for the Angular CLI.",
   "license": "MIT",
   "keywords": [
@@ -13,7 +13,7 @@
   "builders": "builders.json",
   "scripts": {
     "build": "tsc",
-    "pub": "npm publish --access=public"
+    "pub": "npm run build && npm publish --access=public"
   },
   "peerDependencies": {
     "rxjs": "latest",
