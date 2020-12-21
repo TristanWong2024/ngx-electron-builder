@@ -10,9 +10,9 @@ import * as electronBuilder from 'electron-builder';
 import * as Path from 'path';
 import * as fs from 'fs-extra';
 import * as lodash from 'lodash';
+import {BuildUtil} from '../util/build-util';
 
 export function buildElectron(options: ElectronBuildConfig, context: BuilderContext): Observable<BuilderOutput> {
-    context.logger.debug('start build renderer process');
     return executeBrowserBuilder(options, context, {
         webpackConfiguration: async (config) => {
             config.devtool = false;
@@ -26,7 +26,6 @@ export function buildElectron(options: ElectronBuildConfig, context: BuilderCont
         }
     }).pipe(
         flatMap(data => {
-            context.logger.info(`start build main process`);
             return new Observable<BrowserBuilderOutput>((r) => {
                 buildMainProcess(options, context, data)
                     .then((config) => {
@@ -63,7 +62,6 @@ async function buildMainProcess(options: ElectronBuildConfig, context: BuilderCo
     await new Promise<void>((resolve, reject) => {
         webpack(config, (e, status) => {
             if (e || status.hasErrors()) {
-                context.logger.error('build main process error');
                 context.logger.error(status.toString({
                     chunks: true,
                     colors: true
@@ -79,7 +77,7 @@ async function buildMainProcess(options: ElectronBuildConfig, context: BuilderCo
         });
     });
     const meta: any = await context.getProjectMetadata(context.target ? context.target.project : '');
-    const injectProtocolCode = WebpackUtil.registerProtocol(meta.prefix || 'app');
+    const injectProtocolCode = BuildUtil.registerProtocol(meta.prefix || 'app');
     const outPutIndexPath = Path.join(config.output.path, config.output.filename);
     await fs.writeFile(outPutIndexPath, injectProtocolCode, {
         encoding: 'utf8',
@@ -94,6 +92,7 @@ async function electronPack(options: ElectronBuildConfig, context: BuilderContex
     const pkg = await fs.readJson(Path.join(context.workspaceRoot, 'package.json'), {
         encoding: 'utf8'
     });
+    pkg.dependencies['mime-types'] = 'latest';
 
     for (const dep of options.skipDependencies || []) {
         delete pkg.dependencies[dep];
@@ -119,7 +118,6 @@ async function electronPack(options: ElectronBuildConfig, context: BuilderContex
     });
     context.logger.info('electron build success');
 }
-
 
 async function addWebpackDef(context: BuilderContext, options: ElectronBuildConfig) {
     const meta: any = await context.getProjectMetadata(context.target ? context.target.project : '');

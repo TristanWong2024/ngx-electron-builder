@@ -29,9 +29,12 @@ export class BuildUtil {
                 return resolve();
             }
             treeKill(child.pid, (e) => {
-                console.log(e);
                 resolve();
             });
         });
+    }
+
+    static registerProtocol(scheme: string): string {
+        return ` `;
     }
 }

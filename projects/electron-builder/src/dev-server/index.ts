@@ -16,7 +16,6 @@ let mainProcessWatch = false;
 let mainProcess: ChildProcess;
 
 export function buildElectronDevServer(options: ElectronServeOptions, context: BuilderContext): Observable<BuilderOutput> {
-    context.logger.debug('start build renderer process');
     return executeDevServerBuilder(options, context, {
         webpackConfiguration: async (config) => {
             config.target = 'electron-renderer';
@@ -41,8 +40,6 @@ async function addWebpackDef(context: BuilderContext, options: ElectronServeOpti
     const meta: any = await context.getProjectMetadata(context.target ? context.target.project : '');
     const staticPath = JSON.stringify(Path.join(context.workspaceRoot, meta.sourceRoot || 'src/render'));
     const renderPath = JSON.stringify(`http://${options.host || '127.0.0.1'}:${options.port || '4200'}${options.baseHref || '/'}`);
-    context.logger.info(`staticPath:${staticPath}`);
-    context.logger.info(`renderPath:${renderPath}`);
     return new webpack.DefinePlugin({
         'process.env.$STATIC': staticPath,
         'process.env.$RENDER': renderPath,
@@ -62,7 +59,6 @@ async function startElectronMainProcess(options: ElectronServeOptions, context: 
     ];
     webpack(config).watch({}, (e, status) => {
         if (e || status.hasErrors()) {
-            context.logger.error('build main process error');
             context.logger.error(status.toString({
                 chunks: true,
                 colors: true
@@ -74,7 +70,6 @@ async function startElectronMainProcess(options: ElectronServeOptions, context: 
             colors: true
         }));
         BuildUtil.killProcess(context, mainProcess).then(() => {
-            context.logger.info(`start electron`);
             const mainIndexPath = path.join(context.workspaceRoot, webBuildConfig.outputPath, config.output.filename);
             mainProcess = BuildUtil.spawn(context, 'electron', [mainIndexPath], {
                 cwd: context.workspaceRoot,
