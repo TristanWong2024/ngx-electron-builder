@@ -1,8 +1,13 @@
 {
-  "name": "@miup/electron-static",
-  "version": "1.0.0",
-  "main": "index.js",
-  "dependencies": {
-    "mime": "^2.4.7"
-  }
+    "name": "@miup/electron-static",
+    "version": "1.4.4",
+    "main": "index.js",
+    "repository": "https://github.com/miupfun/ngx-electron-builder",
+    "homepage": "https://github.com/miupfun/ngx-electron-builder",
+    "dependencies": {
+        "mime": "^2.4.7"
+    },
+    "scripts": {
+        "pub": "npm publish --access=public"
+    }
 }

@@ -1,48 +1,48 @@
 {
-  "name": "@miup/ngx-electron-builder",
-  "version": "1.3.2",
-  "description": "Electron Builder for the Angular CLI.",
-  "license": "MIT",
-  "repository": "https://github.com/miupfun/ngx-electron-builder",
-  "homepage": "https://github.com/miupfun/ngx-electron-builder",
-  "keywords": [
-    "angular",
-    "electron",
-    "electron-builder"
-  ],
-  "main": "src/index.js",
-  "typings": "src/index.d.ts",
-  "builders": "builders.json",
-  "scripts": {
-    "build": "tsc",
-    "build_watch": "tsc --watch",
-    "pub": "npm run build && npm publish --access=public"
-  },
-  "peerDependencies": {
-    "rxjs": "latest",
-    "@angular-devkit/architect": "latest",
-    "@angular-devkit/build-angular": "latest",
-    "@angular/compiler-cli": "latest",
-    "electron-builder": "latest",
-    "electron": "latest"
-  },
-  "dependencies": {
-    "electron-rebuild": "^2.3.4",
-    "fs-extra": "^9.0.1",
-    "lodash": "^4.17.20",
-    "lodash.merge": "^4.6.2",
-    "tree-kill": "^1.2.2",
-    "ts-loader": "^8.0.11",
-    "webpack-node-externals": "^2.5.2",
-    "@miup/electron-static": "latest"
-  },
-  "devDependencies": {
-    "@types/clean-webpack-plugin": "^0.1.3",
-    "@types/fs-extra": "^9.0.4",
-    "@types/lodash.merge": "^4.6.6",
-    "@types/node": "latest",
-    "@types/webpack": "latest",
-    "@types/webpack-dev-server": "latest",
-    "@types/webpack-node-externals": "^2.5.0"
-  }
+    "name": "@miup/ngx-electron-builder",
+    "version": "1.4.4",
+    "description": "Electron Builder for the Angular CLI.",
+    "license": "MIT",
+    "repository": "https://github.com/miupfun/ngx-electron-builder",
+    "homepage": "https://github.com/miupfun/ngx-electron-builder",
+    "keywords": [
+        "angular",
+        "electron",
+        "electron-builder"
+    ],
+    "main": "src/index.js",
+    "typings": "src/index.d.ts",
+    "builders": "builders.json",
+    "scripts": {
+        "build": "tsc",
+        "build_watch": "tsc --watch",
+        "pub": "npm run build && npm publish --access=public"
+    },
+    "peerDependencies": {
+        "rxjs": "latest",
+        "@angular-devkit/architect": "latest",
+        "@angular-devkit/build-angular": "latest",
+        "@angular/compiler-cli": "latest",
+        "electron-builder": "latest",
+        "electron": "latest"
+    },
+    "dependencies": {
+        "electron-rebuild": "^2.3.4",
+        "fs-extra": "^9.0.1",
+        "lodash": "^4.17.20",
+        "lodash.merge": "^4.6.2",
+        "tree-kill": "^1.2.2",
+        "ts-loader": "^8.0.11",
+        "webpack-node-externals": "^2.5.2",
+        "@miup/electron-static": "latest"
+    },
+    "devDependencies": {
+        "@types/clean-webpack-plugin": "^0.1.3",
+        "@types/fs-extra": "^9.0.4",
+        "@types/lodash.merge": "^4.6.6",
+        "@types/node": "latest",
+        "@types/webpack": "latest",
+        "@types/webpack-dev-server": "latest",
+        "@types/webpack-node-externals": "^2.5.0"
+    }
 }
