@@ -10,13 +10,13 @@ export class WebpackUtil {
         const nodeExternal = nodeExternals();
         const config: webpack.Configuration = {
             resolve: {
-                extensions: ['.js', '.ts', '.json'],
+                extensions: ['.js', '.ts', '.tsx', '.json', '.node'],
             },
             devtool: 'source-map', // 打包出的js文件是否生成map文件（方便浏览器调试）
             mode: 'production',
             entry: path.join(context.workspaceRoot, defaultConfig.mainProcess || 'src/main/index.ts'), // 入口js
             output: {
-                filename: defaultConfig.mainProcessOutputName || 'index.js', // 生成的fiename需要与package.json中的main一致
+                filename: defaultConfig.mainProcessOutputName || 'index.[chunkhash].js', // 生成的fiename需要与package.json中的main一致
                 path: path.join(context.workspaceRoot, defaultConfig.outputPath),
                 publicPath: path.join(context.workspaceRoot, defaultConfig.outputPath),
                 libraryTarget: 'commonjs',
@@ -44,5 +44,9 @@ export class WebpackUtil {
             ],
         };
         return config;
+    }
+
+    static getBuildJsNameByStatus(status: any): string {
+        return Object.keys(status.compilation.assets).find(s => s.endsWith('.js')) || 'index.js';
     }
 }

@@ -65,12 +65,14 @@ async function startElectronMainProcess(options: ElectronServeOptions, context: 
             }));
             return;
         }
+
         context.logger.info(status.toString({
             chunks: true,
             colors: true
         }));
         BuildUtil.killProcess(context, mainProcess).then(() => {
-            const mainIndexPath = path.join(context.workspaceRoot, webBuildConfig.outputPath, config.output.filename);
+            const buildMainJsFileName = WebpackUtil.getBuildJsNameByStatus(status);
+            const mainIndexPath = path.join(context.workspaceRoot, webBuildConfig.outputPath, buildMainJsFileName);
             mainProcess = BuildUtil.spawn(context, 'electron', [mainIndexPath], {
                 cwd: context.workspaceRoot,
                 env: {

@@ -33,8 +33,4 @@ export class BuildUtil {
             });
         });
     }
-
-    static registerProtocol(scheme: string): string {
-        return ` `;
-    }
 }

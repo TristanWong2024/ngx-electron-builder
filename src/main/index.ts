@@ -1,5 +1,4 @@
 import {app, BrowserWindow} from 'electron';
-import {Config} from '../common/config';
 
 app.on('ready', () => {
     const w = new BrowserWindow({
@@ -11,11 +10,9 @@ app.on('ready', () => {
             contextIsolation: false
         }
     });
-    // @ts-ignore
-    w.loadURL(process.env.$RENDER);
+    w.loadURL(`${process.env.$RENDER}#/hello`);
     w.once('ready-to-show', () => {
         w.show();
     });
-    console.log(process.env.$RENDER)
-    console.log(Config.name);
 });
+

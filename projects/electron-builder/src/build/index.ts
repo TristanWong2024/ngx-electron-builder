@@ -10,9 +10,9 @@ import * as electronBuilder from 'electron-builder';
 import * as Path from 'path';
 import * as fs from 'fs-extra';
 import * as lodash from 'lodash';
-import {BuildUtil} from '../util/build-util';
 
 export function buildElectron(options: ElectronBuildConfig, context: BuilderContext): Observable<BuilderOutput> {
+    options.baseHref = '';
     return executeBrowserBuilder(options, context, {
         webpackConfiguration: async (config) => {
             config.devtool = false;
@@ -28,9 +28,9 @@ export function buildElectron(options: ElectronBuildConfig, context: BuilderCont
         flatMap(data => {
             return new Observable<BrowserBuilderOutput>((r) => {
                 buildMainProcess(options, context, data)
-                    .then((config) => {
+                    .then((status) => {
                         Object.assign(data, {
-                            mainWebpackConfig: config
+                            mainProcessBuildStatus: status
                         });
                         r.next(data);
                         r.complete();
@@ -41,6 +41,7 @@ export function buildElectron(options: ElectronBuildConfig, context: BuilderCont
         flatMap(data => {
             return new Observable<BuilderOutput>(subscriber => {
                 electronPack(options, context, data).then(() => {
+                    delete data.mainProcessBuildStatus;
                     subscriber.next(data);
                     subscriber.complete();
                 }).catch((e) => {
@@ -59,7 +60,7 @@ async function buildMainProcess(options: ElectronBuildConfig, context: BuilderCo
         ...(config.plugins || []),
         dp
     ];
-    await new Promise<void>((resolve, reject) => {
+    const buildStatus = await new Promise<any>((resolve, reject) => {
         webpack(config, (e, status) => {
             if (e || status.hasErrors()) {
                 context.logger.error(status.toString({
@@ -73,18 +74,21 @@ async function buildMainProcess(options: ElectronBuildConfig, context: BuilderCo
                 chunks: true,
                 colors: true
             }));
-            resolve();
+            resolve(status);
         });
     });
+
+    const buildMainJsFileName = WebpackUtil.getBuildJsNameByStatus(buildStatus);
+
     const meta: any = await context.getProjectMetadata(context.target ? context.target.project : '');
-    const injectProtocolCode = BuildUtil.registerProtocol(meta.prefix || 'app');
-    const outPutIndexPath = Path.join(config.output.path, config.output.filename);
+    const injectProtocolCode = `require('@miup/electron-static')('${meta.prefix || 'app'}',__dirname)`;
+    const outPutIndexPath = Path.join(config.output.path, buildMainJsFileName);
     await fs.writeFile(outPutIndexPath, injectProtocolCode, {
         encoding: 'utf8',
         mode: 438,
         flag: 'a'
     });
-    return config;
+    return buildStatus;
 }
 
 async function electronPack(options: ElectronBuildConfig, context: BuilderContext, data: any) {
@@ -92,14 +96,12 @@ async function electronPack(options: ElectronBuildConfig, context: BuilderContex
     const pkg = await fs.readJson(Path.join(context.workspaceRoot, 'package.json'), {
         encoding: 'utf8'
     });
-    pkg.dependencies['mime-types'] = 'latest';
-
+    pkg.dependencies['@miup/electron-static'] = 'latest';
     for (const dep of options.skipDependencies || []) {
         delete pkg.dependencies[dep];
     }
-
     delete pkg.devDependencies;
-    pkg.main = data.mainWebpackConfig.output.filename;
+    pkg.main = WebpackUtil.getBuildJsNameByStatus(data.mainProcessBuildStatus);
     await fs.writeJSON(Path.join(context.workspaceRoot, options.outputPath, 'package.json'), pkg);
 
     fs.ensureDirSync(Path.join(context.workspaceRoot, options.outputPath, 'node_modules'));
@@ -108,7 +110,7 @@ async function electronPack(options: ElectronBuildConfig, context: BuilderContex
             output: Path.join(options.outputPath, '../'),
             app: `${options.outputPath}`
         },
-        files: ['**'],
+        files: ['**/*'],
         extends: null
     };
     const configPath = Path.join(context.workspaceRoot, options.electronBuildConfig || 'electron-builder.js');
@@ -116,7 +118,6 @@ async function electronPack(options: ElectronBuildConfig, context: BuilderContex
     await electronBuilder.build({
         config: lodash.merge(defaultBuildConfig, electronBuildConfig)
     });
-    context.logger.info('electron build success');
 }
 
 async function addWebpackDef(context: BuilderContext, options: ElectronBuildConfig) {
