@@ -39,7 +39,7 @@ export function buildElectronDevServer(options: ElectronServeOptions, context: B
 async function addWebpackDef(context: BuilderContext, options: ElectronServeOptions) {
     const meta: any = await context.getProjectMetadata(context.target ? context.target.project : '');
     const staticPath = JSON.stringify(Path.join(context.workspaceRoot, meta.sourceRoot || 'src/render'));
-    const renderPath = JSON.stringify(`http://${options.host || '127.0.0.1'}:${options.port || '4200'}${options.baseHref || '/'}`);
+    const renderPath = JSON.stringify(`http://${options.host || '127.0.0.1'}:${options.port || '4200'}${options.baseHref || ''}`);
     return new webpack.DefinePlugin({
         'process.env.$STATIC': staticPath,
         'process.env.$RENDER': renderPath,

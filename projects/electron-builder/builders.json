@@ -2,12 +2,12 @@
   "builders": {
     "build": {
       "implementation": "./dist/build",
-      "schema": "./dist/build/schema.json",
+      "schema": "./schema/build/schema.json",
       "description": "Electron Builder"
     },
     "dev-server": {
       "implementation": "./dist/dev-server",
-      "schema": "./dist/dev-server/schema.json",
+      "schema": "./schema/dev-server/schema.json",
       "description": "Electron Builder using dev-server"
     }
   }

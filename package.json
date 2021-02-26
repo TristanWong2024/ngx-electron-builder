@@ -1,13 +1,14 @@
 {
   "name": "ngx-electron-builder",
-  "version": "0.0.0",
+  "version": "1.5.2",
   "author": {
     "name": "TristanWong",
     "email": "tw949561391@icloud.com"
   },
   "scripts": {
     "start": "ng serve",
-    "build": "ng build --prod=true"
+    "build": "ng build --prod=true",
+    "pub": "node ./build/publish.js"
   },
   "private": true,
   "dependencies": {
