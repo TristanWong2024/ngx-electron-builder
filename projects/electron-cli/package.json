@@ -1,6 +1,6 @@
 {
     "name": "@miup/ngx-electron-cli",
-    "version": "1.5.2",
+    "version": "1.5.4",
     "description": "",
     "main": "index.js",
     "repository": "https://github.com/miupfun/ngx-electron-builder",

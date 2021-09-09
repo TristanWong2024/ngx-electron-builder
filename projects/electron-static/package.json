@@ -1,6 +1,6 @@
 {
     "name": "@miup/electron-static",
-    "version": "1.5.2",
+    "version": "1.5.4",
     "main": "index.js",
     "repository": "https://github.com/miupfun/ngx-electron-builder",
     "homepage": "https://github.com/miupfun/ngx-electron-builder",

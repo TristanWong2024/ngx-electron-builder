@@ -1,22 +1,27 @@
-import {BuilderContext, BuilderOutput, createBuilder, targetFromTargetString} from '@angular-devkit/architect';
-import {executeDevServerBuilder} from '@angular-devkit/build-angular';
-import {json} from '@angular-devkit/core';
-import {Observable, of} from 'rxjs';
-import {flatMap} from 'rxjs/internal/operators';
-import {WebpackUtil} from '../util/webpack-util';
+import { BuilderContext, BuilderOutput, createBuilder, targetFromTargetString } from '@angular-devkit/architect';
+import { executeDevServerBuilder, ExecutionTransformer } from '@angular-devkit/build-angular';
+import { json } from '@angular-devkit/core';
+import { Observable, of } from 'rxjs';
+import { flatMap } from 'rxjs/internal/operators';
+import { WebpackUtil } from '../util/webpack-util';
 import * as webpack from 'webpack';
-import {ElectronBuildConfig} from '../build/schema';
-import {BuildUtil} from '../util/build-util';
+import { ElectronBuildConfig } from '../build/schema';
+import { BuildUtil } from '../util/build-util';
 import * as path from 'path';
-import {ChildProcess} from 'child_process';
-import {ElectronServeOptions} from './schema';
+import { ChildProcess } from 'child_process';
+import { ElectronServeOptions } from './schema';
 import * as Path from 'path';
 
 let mainProcessWatch = false;
 let mainProcess: ChildProcess;
 
-export function buildElectronDevServer(options: ElectronServeOptions, context: BuilderContext): Observable<BuilderOutput> {
+export function buildElectronDevServer(options: ElectronServeOptions, context: BuilderContext, transforms?: {
+    webpackConfiguration?: ExecutionTransformer<webpack.Configuration>;
+    logging?: any;
+    indexHtml?: any;
+}): Observable<BuilderOutput> {
     return executeDevServerBuilder(options, context, {
+        ...(transforms || {}),
         webpackConfiguration: async (config) => {
             config.target = 'electron-renderer';
             const dp = await addWebpackDef(context, options);
