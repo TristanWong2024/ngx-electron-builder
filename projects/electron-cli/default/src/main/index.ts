@@ -10,7 +10,7 @@ app.on('ready', () => {
             contextIsolation: false
         }
     });
-    w.loadURL(process.env.$RENDER);
+    w.loadURL(process.env.$RENDER as string);
     w.once('ready-to-show', () => {
         w.show();
     });
